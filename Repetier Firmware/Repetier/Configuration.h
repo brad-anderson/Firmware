@@ -7,12 +7,13 @@ Rostock MAX v3   = 5
 Hacker H2        = 6
 */
 // ### Define your Printer Model here! ###
-#define PRINTER 5
+#define PRINTER 2
 
-// SeeMeCNC Bowden w/PEEK barrel = 1
-// HE240 on ERIS w/accel probe   = 2
-// HE280 w/accel probe           = 3
-#define HOTEND 3
+// SeeMeCNC Bowden w/PEEK barrel          = 1
+// HE240 on ERIS w/accel probe            = 2
+// HE280 w/accel probe                    = 3
+// E-3D v6 using HE-280 PCB w/accel probe = 4 
+#define HOTEND 4
 
 // ### Define your motherboard here! ###
 // 301 = RAMBo    302 = MINI RAMBo
@@ -59,8 +60,15 @@ Hacker H2        = 6
 #endif
 
 #define Z_LIFT_ON_PAUSE 20         // Amount to lift the head (mm) when pausing from the LCD screen
-#define MIN_DEFECT_TEMPERATURE 16  // this is the min temp that will allow the hotend to start heating.  Below this it will show as defective to help identify bad thermistors
-#define MAX_DEFECT_TEMPERATURE 300 // this is the max temp that wthe printer will throw errors about defective thermistors
+// MIN_DEFECT_TEMPERATURE: this is the min temp that will allow the hotend to start heating.  Below this it will show as defective to help identify bad thermistors
+// MAX_DEFECT_TEMPERATURE: this is the max temp that the printer will throw errors about defective thermistors
+#if HOTEND == 4
+#define MIN_DEFECT_TEMPERATURE 5
+#define MAX_DEFECT_TEMPERATURE 290
+#else
+#define MIN_DEFECT_TEMPERATURE 16
+#define MAX_DEFECT_TEMPERATURE 300
+#endif
 
 #define MIXING_EXTRUDER 0
 #define DRIVE_SYSTEM 3
@@ -117,6 +125,21 @@ Hacker H2        = 6
 #define EXT1_PID_I 9.7
 #define EXT1_PID_D 60.0
 #define EXT1_PID_MAX 255
+#elif HOTEND == 4
+#define MAXTEMP 285
+#define UI_SET_MAX_EXTRUDER_TEMP 280
+#define EXT0_PID_INTEGRAL_DRIVE_MAX 230
+#define EXT0_PID_INTEGRAL_DRIVE_MIN 80
+#define EXT0_PID_PGAIN_OR_DEAD_TIME 48.3
+#define EXT0_PID_I 9.7
+#define EXT0_PID_D 60.0
+#define EXT0_PID_MAX 255
+#define EXT1_PID_INTEGRAL_DRIVE_MAX 230
+#define EXT1_PID_INTEGRAL_DRIVE_MIN 80
+#define EXT1_PID_PGAIN_OR_DEAD_TIME 48.3
+#define EXT1_PID_I 9.7
+#define EXT1_PID_D 60.0
+#define EXT1_PID_MAX 255
 #endif
 // using PWM not PDM
 #define PDM_FOR_EXTRUDER 0
@@ -132,7 +155,11 @@ Hacker H2        = 6
 #define EXT0_X_OFFSET 0
 #define EXT0_Y_OFFSET 0
 #define EXT0_STEPS_PER_MM 92.4
+#if HOTEND == 4
+#define EXT0_TEMPSENSOR_TYPE 8 // ATC Semitec 104-GT2
+#else
 #define EXT0_TEMPSENSOR_TYPE 97 //97
+#endif
 #define EXT0_TEMPSENSOR_PIN TEMP_0_PIN
 #define EXT0_HEATER_PIN HEATER_0_PIN
 #define EXT0_STEP_PIN ORIG_E0_STEP_PIN
@@ -257,7 +284,7 @@ Hacker H2        = 6
 #define MAX_TRAVEL_ACCELERATION_UNITS_PER_SQ_SECOND_Z 2800
 #define MAX_JERK 28
 #define MAX_ZJERK 28
-#if HOTEND == 3
+#if HOTEND == 3 || HOTEND == 4
 #define FEATURE_Z_PROBE 1
 #else
 #define FEATURE_Z_PROBE 0
@@ -326,7 +353,7 @@ Hacker H2        = 6
 #define MAX_TRAVEL_ACCELERATION_UNITS_PER_SQ_SECOND_Z 3000
 #define MAX_JERK 32
 #define MAX_ZJERK 32
-#if HOTEND == 3
+#if HOTEND == 3 || HOTEND == 4
 #define FEATURE_Z_PROBE 1
 #else
 #define FEATURE_Z_PROBE 0
